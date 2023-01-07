@@ -8,6 +8,8 @@ spec:
   interval: 30m
   ref:
     branch: vagrant
+  secretRef:
+    name: github-deploy-key
   url: "https://github.com/benwalio/laughing-engine"
   ignore: |
     # exclude all

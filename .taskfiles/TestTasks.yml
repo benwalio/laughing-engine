@@ -3,6 +3,7 @@ version: "3"
 
 includes:
   cluster: .testtasks/TestClusterTasks.yml
+  vagrant: .testtasks/VagrantTasks.yml
 
 tasks:
 
