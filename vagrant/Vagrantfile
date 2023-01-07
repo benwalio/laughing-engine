@@ -1,0 +1,62 @@
+Vagrant.require_version ">= 2.3.4"
+
+IMAGE_NAME = ENV['BOOTSTRAP_VAGRANT_IMAGE']
+N = 2
+VM_PROVIDER = ENV['BOOTSTRAP_VAGRANT_VM_PROVIDER']
+BASE_IP = ENV['BOOTSTRAP_VAGRANT_BASE_IP']
+
+Vagrant.configure("2") do |config|
+    config.ssh.insert_key = false
+    config.ssh.forward_agent = true
+    # config.ssh.password = 'hunter2'
+    # config.ssh.private_key_path = "~/.ssh/id_rsa"
+    config.ssh.port = 22
+
+    config.vm.provider VM_PROVIDER do |v|
+        v.memory = 2048
+        v.cpus = 2
+    end
+
+    config.vm.provision "shell" do |s|
+      ssh_pub_key = File.readlines("/Users/ben/.ssh/id_rsa.pub").first.strip
+      s.inline = <<-SHELL
+        echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+        # echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
+        SHELL
+    end
+
+    # config.vm.define "k8s-main" do |main|
+    #     main.vm.box = IMAGE_NAME
+    #     main.vm.network "public_network", ip: "#{BASE_IP}.10"
+    #     main.vm.hostname = "k8s-main"
+    #     # main.vm.provision "ansible" do |ansible|
+    #     #     ansible.playbook = "kubernetes-setup/main-playbook.yml"
+    #     #     ansible.extra_vars = {
+    #     #         node_ip: ${BOOTSTRAP_ANSIBLE_HOST_ADDR_0},
+    #     #     }
+    #     # end
+    # end
+
+    (0..N).each do |i|
+        config.vm.define "node-#{i}" do |node|
+            node.vm.box = IMAGE_NAME
+            node.vm.network "private_network", ip: "#{BASE_IP}.#{i + 10}"
+            node.vm.hostname = "node-#{i}"
+            # node.vm.provision "shell" do |s|
+            #   s.inline = "ssh-keyscan -H $1 >> /Users/ben/.ssh/known_hosts"
+            #   s.args = [#{BASE_IP}.#{i + 10}]
+            # end
+            # node.vm.provision "ansible" do |ansible|
+            #     ansible.playbook = "kubernetes-setup/node-playbook.yml"
+            #     ansible.extra_vars = {
+            #         node_ip: "192.168.50.#{i + 10}",
+            #     }
+            # end
+        end
+    end
+
+    config.trigger.after :destroy do |trigger|
+      trigger.info = "Deleting from known_hosts"
+      trigger.run = {path: "./triggers/Vagrant_trigger_after_destroy.sh"}
+    end
+end

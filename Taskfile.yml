@@ -7,6 +7,7 @@ vars:
   KUBERNETES_DIR: "{{.PROJECT_DIR}}/kubernetes"
   ANSIBLE_DIR: "{{.PROJECT_DIR}}/ansible"
   TERRAFORM_DIR: "{{.PROJECT_DIR}}/terraform"
+  VAGRANT_DIR: "{{.PROJECT_DIR}}/vagrant"
 
 dotenv: [".config.env"]
 
@@ -18,7 +19,9 @@ includes:
   cluster: .taskfiles/ClusterTasks.yml
   precommit: .taskfiles/PrecommitTasks.yml
   terraform: .taskfiles/TerraformTasks.yml
+  test: .taskfiles/TestTasks.yml
   sops: .taskfiles/SopsTasks.yml
+  vagrant: .taskfiles/VagrantTasks.yml
 
 tasks:
 
@@ -52,6 +55,11 @@ tasks:
         weaveworks/tap/gitops
         yamllint
         yq
+
+  update-env:
+    desc: load/ reload config.env
+    cmds:
+      - source .config.env
 
   verify:
     desc: Verify env settings

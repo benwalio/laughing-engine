@@ -1,0 +1,23 @@
+---
+version: "3"
+
+tasks:
+  up:
+    desc: Boot vagrant nodes
+    cmds:
+      - vagrant up
+
+  verify:
+    desc: Verify Vagrantfile
+    cmds:
+      - vagrant validate
+
+  down:
+    desc: Shutdown vagrant nodes
+    cmds:
+      - vagrant halt
+
+  nuke:
+    desk: Destroy vagrant nodes
+    cmds:
+      - vagrant destroy -f

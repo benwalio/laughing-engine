@@ -36,6 +36,7 @@ spec:
       namespaceSelector:
         matchNames:
           - default
+          - flux-system
     ingress:
       main:
         enabled: true
