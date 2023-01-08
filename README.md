@@ -250,6 +250,8 @@ In order to use Terraform and `cert-manager` with the Cloudflare DNS challenge y
     # k8s-1          Ready    worker                    4d20h   v1.21.5+k3s1
     ```
 
+`kubectl label node <node> node-role.kubernetes.io/worker=worker`
+
 ### ☁️ Configuring Cloudflare DNS with Terraform
 
 📍 Review the Terraform scripts under `./terraform/cloudflare/` and make sure you understand what it's doing (no really review it).
