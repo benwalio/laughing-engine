@@ -56,8 +56,8 @@ spec:
         use-forwarded-headers: "true"
       metrics:
         enabled: false
-      podAnnotations:
-        configmap.reloader.stakater.com/reload: "cloudflare-networks"
+      # podAnnotations:
+      #   configmap.reloader.stakater.com/reload: "cloudflare-networks"
       resources:
         requests:
           cpu: 10m
