@@ -8,9 +8,9 @@ spec:
   interval: 30m
   ref:
     branch: main
-  url: "ssh://git@git.benwal.io:6922/benwalio/laughing-engine"
-  secretRef:
-    name: github-deploy-key
+  url: "ssh://git@github.com:benwalio/laughing-engine"
+  # secretRef:
+  #   name: github-deploy-key
   ignore: |
     # exclude all
     /*
